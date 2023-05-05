@@ -1,7 +1,7 @@
 package efub.session.blog.domain.post.service;
 
 import efub.session.blog.domain.account.domain.Account;
-import efub.session.blog.domain.account.repository.AccountRepository;
+import efub.session.blog.domain.account.service.AccountService;
 import efub.session.blog.domain.post.domain.Post;
 import efub.session.blog.domain.post.dto.request.PostModifyRequestDto;
 import efub.session.blog.domain.post.dto.request.PostRequestDto;
@@ -18,11 +18,10 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     public Post addPost(PostRequestDto requestDto) {
-        Account writer = accountRepository.findById(requestDto.getAccountId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계정입니다."));
+        Account writer = accountService.findAccountById(requestDto.getAccountId());
 
         return postRepository.save(
                 Post.builder()
@@ -42,6 +41,12 @@ public class PostService {
     public Post findPost(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Post> findPostListByWriter(Long accountId) {
+        Account writer = accountService.findAccountById(accountId);
+        return postRepository.findAllByWriter(writer);
     }
 
     public void removePost(Long postId, Long accountId) {
