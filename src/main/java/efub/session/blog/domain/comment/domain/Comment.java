@@ -5,11 +5,13 @@ import efub.session.blog.domain.post.domain.Post;
 import efub.session.blog.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
 
@@ -20,8 +22,8 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = false, length = 500)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)  // 지연 로딩 사용을 명시적으로 설정하기
+    @JoinColumn(name = "post_id", nullable = false, updatable = false)  // FK로 사용되는 컬럼 지정
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)

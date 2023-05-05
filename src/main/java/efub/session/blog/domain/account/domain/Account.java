@@ -1,5 +1,6 @@
 package efub.session.blog.domain.account.domain;
 
+import efub.session.blog.domain.comment.domain.Comment;
 import efub.session.blog.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,6 +33,9 @@ public class Account extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
 
     @Builder
     public Account(Long accountId, String email, String password, String nickname, String bio) {
