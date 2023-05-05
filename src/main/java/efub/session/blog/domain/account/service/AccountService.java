@@ -1,8 +1,8 @@
 package efub.session.blog.domain.account.service;
 
 import efub.session.blog.domain.account.domain.Account;
-import efub.session.blog.domain.account.dto.AccountUpdateRequestDto;
-import efub.session.blog.domain.account.dto.SignUpRequestDto;
+import efub.session.blog.domain.account.dto.request.AccountUpdateRequestDto;
+import efub.session.blog.domain.account.dto.request.SignUpRequestDto;
 import efub.session.blog.domain.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

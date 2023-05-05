@@ -2,7 +2,7 @@ package efub.session.blog.domain.post.domain;
 
 import efub.session.blog.domain.account.domain.Account;
 import efub.session.blog.domain.comment.domain.Comment;
-import efub.session.blog.domain.post.dto.PostModifyRequestDto;
+import efub.session.blog.domain.post.dto.request.PostModifyRequestDto;
 import efub.session.blog.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
