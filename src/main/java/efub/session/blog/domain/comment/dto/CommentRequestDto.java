@@ -3,14 +3,10 @@ package efub.session.blog.domain.comment.dto;
 import efub.session.blog.domain.account.domain.Account;
 import efub.session.blog.domain.comment.domain.Comment;
 import efub.session.blog.domain.post.domain.Post;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+// 애노테이션 추가하기!
 public class CommentRequestDto {
 
     @NotNull(message = "작성자 ID를 입력해주세요.")

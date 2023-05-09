@@ -43,12 +43,6 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
     }
 
-    @Transactional(readOnly = true)
-    public List<Post> findPostListByWriter(Long accountId) {
-        Account writer = accountService.findAccountById(accountId);
-        return postRepository.findAllByWriter(writer);
-    }
-
     public void removePost(Long postId, Long accountId) {
         Post post = postRepository.findByPostIdAndWriter_AccountId(postId, accountId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
