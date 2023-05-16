@@ -1,10 +1,10 @@
 package efub.session.blog.board.controller;
 
-import efub.session.community.board.domain.Board;
-import efub.session.community.board.dto.BoardCreateRequestDto;
-import efub.session.community.board.dto.BoardModifyRequestDto;
-import efub.session.community.board.dto.BoardResponseDto;
-import efub.session.community.board.service.BoardService;
+import efub.session.blog.board.domain.Board;
+import efub.session.blog.board.dto.BoardCreateRequestDto;
+import efub.session.blog.board.dto.BoardModifyRequestDto;
+import efub.session.blog.board.dto.BoardResponseDto;
+import efub.session.blog.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

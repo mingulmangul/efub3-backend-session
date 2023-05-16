@@ -1,12 +1,12 @@
 package efub.session.blog.board.service;
 
 
-import efub.session.community.account.domain.Member;
-import efub.session.community.account.repository.MemberRepository;
-import efub.session.community.board.domain.Board;
-import efub.session.community.board.dto.BoardCreateRequestDto;
-import efub.session.community.board.dto.BoardModifyRequestDto;
-import efub.session.community.board.repository.BoardRepository;
+import efub.session.blog.account.domain.Account;
+import efub.session.blog.account.repository.AccountRepository;
+import efub.session.blog.board.domain.Board;
+import efub.session.blog.board.dto.BoardCreateRequestDto;
+import efub.session.blog.board.dto.BoardModifyRequestDto;
+import efub.session.blog.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final MemberRepository memberRepository;
+    private final Account AccountRepository;
 
     public Board createBoard(BoardCreateRequestDto requestDto) {
         if(existsByTitle(requestDto.getTitle())) {
             throw new IllegalArgumentException("이미 존재하는 게시판명입니다. " + requestDto.getTitle());
         }
-        Member owner = memberRepository.findById(requestDto.getOwnerId())
+        Account owner = AccountRepository.findById(requestDto.getOwnerId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
         return boardRepository.save(

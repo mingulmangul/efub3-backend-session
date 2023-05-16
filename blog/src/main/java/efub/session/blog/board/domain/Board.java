@@ -1,7 +1,7 @@
 package efub.session.blog.board.domain;
 
-import efub.session.community.account.domain.Member;
-import efub.session.community.global.entity.BaseTimeEntity;
+import efub.session.blog.account.domain.Account;
+import efub.session.blog.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,10 +35,10 @@ public class Board extends BaseTimeEntity {
     // 게시판 주인(Member) foreign key
     @ManyToOne
     @JoinColumn(name = "member_id") // Builder에서 받은 Member 객체의 컬럼 중 member_id를 기준으로 join
-    private Member owner;
+    private Account owner;
 
     @Builder
-    public Board (String title, String description, String pinned, Member owner) {
+    public Board (String title, String description, String pinned, Account owner) {
         this.title = title;
         this.description = description;
         this.pinned = pinned;
@@ -46,7 +46,7 @@ public class Board extends BaseTimeEntity {
     }
 
     // 게시판 주인 수정
-    public void updateBoard(Member owner) {
+    public void updateBoard(Account owner) {
         this.owner = owner;
     }
 

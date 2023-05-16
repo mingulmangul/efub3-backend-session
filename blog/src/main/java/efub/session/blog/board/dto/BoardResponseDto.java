@@ -1,6 +1,6 @@
 package efub.session.blog.board.dto;
 
-import efub.session.community.board.domain.Board;
+import efub.session.blog.board.domain.Board;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
