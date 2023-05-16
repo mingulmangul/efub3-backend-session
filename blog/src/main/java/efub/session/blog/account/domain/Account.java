@@ -51,4 +51,6 @@ public class Account extends BaseTimeEntity {
     public void withdrawAccount() {
         this.status = AccountStatus.UNREGISTERED;
     }
+
+
 }

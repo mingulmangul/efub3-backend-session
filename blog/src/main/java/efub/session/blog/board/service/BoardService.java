@@ -55,8 +55,8 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(Long boardId, Long memberId) {
-        Board board = boardRepository.findByBoardIdAndAndOwner_MemberId(boardId, memberId)
+    public void deleteBoard(Long boardId, Long accountId) {
+        Board board = boardRepository.findByBoardIdAndOwner_AccountId(boardId, accountId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
         boardRepository.delete(board);
     }
