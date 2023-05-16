@@ -34,7 +34,7 @@ public class Board extends BaseTimeEntity {
 
     // 게시판 주인(Member) foreign key
     @ManyToOne
-    @JoinColumn(name = "member_id") // Builder에서 받은 Member 객체의 컬럼 중 member_id를 기준으로 join
+    @JoinColumn(name = "account_id") // Builder에서 받은 Member 객체의 컬럼 중 member_id를 기준으로 join
     private Account owner;
 
     @Builder

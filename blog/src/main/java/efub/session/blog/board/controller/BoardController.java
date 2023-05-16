@@ -19,12 +19,12 @@ public class BoardController {
 
     // 게시판 생성 (POST)
     @PostMapping
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(value = HttpStatus.OK)
     public BoardResponseDto createBoard(@RequestBody @Valid final BoardCreateRequestDto requestDto) {
         return new BoardResponseDto(boardService.createBoard(requestDto));    // 새로 만든 게시판의 정보를 Dto 객체로 만들어 리턴
     }
 
-    // 게시판 하나 조회 (GET)
+    // 게시판 한 개 조회 (GET)
     @GetMapping("/{boardId}")
     @ResponseStatus(value = HttpStatus.OK)
     public BoardResponseDto getBoard(@PathVariable Long boardId) {

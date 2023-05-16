@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-// 게시판 관련 응답메시지에 사용되는 DTO
+// 게시판 응답메시지와 관련된 DTO
 @Getter
 @NoArgsConstructor
 public class BoardResponseDto {

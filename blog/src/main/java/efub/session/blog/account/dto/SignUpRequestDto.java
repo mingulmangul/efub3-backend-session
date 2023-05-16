@@ -38,7 +38,7 @@ public class SignUpRequestDto {
                 .email(this.email)
                 .password(this.password)
                 .nickname(this.nickname)
-                .bio("안녕하세요!")
+                .bio("안녕하세요")
                 .build();
     }
 }
