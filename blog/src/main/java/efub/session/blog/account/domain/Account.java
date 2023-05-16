@@ -1,5 +1,6 @@
 package efub.session.blog.account.domain;
 
+import efub.session.blog.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import static efub.session.blog.account.domain.AccountStatus.REGISTERED;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Account {
+public class Account extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id", updatable = false)
@@ -40,12 +41,16 @@ public class Account {
         this.status = REGISTERED;
     }
 
+    //닉네임 수정하기
     public void updateAccount(String bio, String nickname) {
         this.bio = bio;
         this.nickname = nickname;
     }
 
+    //회원 탈퇴
     public void withdrawAccount() {
         this.status = AccountStatus.UNREGISTERED;
     }
+
+
 }

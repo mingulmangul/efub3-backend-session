@@ -48,7 +48,7 @@ public class AccountController {
     @ResponseStatus(value = HttpStatus.OK)
     public String withdraw(@PathVariable long accountId) {
         accountService.withdraw(accountId);
-        return "성공적으로 탈퇴가 완료되었습니다.";
+        return "성공적으로 탈퇴되었습니다.";
     }
 
     /* 계정 삭제 (db에서도 삭제) */
