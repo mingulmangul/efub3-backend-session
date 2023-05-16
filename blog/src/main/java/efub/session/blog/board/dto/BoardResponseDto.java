@@ -30,7 +30,7 @@ public class BoardResponseDto {
         this.title = board.getTitle();
         this.description = board.getDescription();
         this.pinned = board.getPinned();
-        this.ownerId = board.getOwner().getMemberId();
+        this.ownerId = board.getOwner().getAccountId();
         this.createdDate = board.getCreatedDate();
         this.modifiedDate = board.getModifiedDate();
     }

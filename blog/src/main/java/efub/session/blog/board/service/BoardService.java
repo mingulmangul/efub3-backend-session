@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final Account AccountRepository;
+    private final AccountRepository accountRepository;
 
     public Board createBoard(BoardCreateRequestDto requestDto) {
         if(existsByTitle(requestDto.getTitle())) {
             throw new IllegalArgumentException("이미 존재하는 게시판명입니다. " + requestDto.getTitle());
         }
-        Account owner = AccountRepository.findById(requestDto.getOwnerId())
+        Account owner = accountRepository.findById(requestDto.getOwnerId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
         return boardRepository.save(
@@ -49,7 +49,7 @@ public class BoardService {
 
     public Long update(Long boardId, BoardModifyRequestDto requestDto) {
         Board board = findBoardById(boardId);
-        board.updateBoard(memberRepository.findById(requestDto.getOwnerId())
+        board.updateBoard(accountRepository.findById(requestDto.getOwnerId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다.")));
         return boardId;
     }
