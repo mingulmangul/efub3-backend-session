@@ -3,11 +3,11 @@
 name: Deploy to Amazon EC2
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "mingulmangul" branch
+  # Triggers the workflow on push or pull request events but only for the "member/mingulmangul" branch
   push:
-    branches: [ "mingulmangul" ]
+    branches: [ "member/mingulmangul" ]
   pull_request:
-    branches: [ "mingulmangul" ]
+    branches: [ "member/mingulmangul" ]
 
 env:
   AWS_REGION: ap-northeast-2
