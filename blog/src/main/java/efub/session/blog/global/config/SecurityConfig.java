@@ -9,13 +9,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import efub.session.blog.global.jwt.JwtAuthenticationProvider;
+import efub.session.blog.global.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+	private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,6 +35,8 @@ public class SecurityConfig {
 			.antMatchers("/auth/**").permitAll() // 해당 URL에 대한 요청은 허용
 			.anyRequest().authenticated()
 			.and()
+			.addFilterBefore(new JwtFilter(jwtAuthenticationProvider),
+				UsernamePasswordAuthenticationFilter.class)    // 필터 추가
 			.build();
 	}
 
