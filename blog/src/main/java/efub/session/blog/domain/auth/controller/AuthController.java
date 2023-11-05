@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import efub.session.blog.domain.account.domain.Account;
 import efub.session.blog.domain.auth.dto.request.SignUpRequestDto;
 import efub.session.blog.domain.auth.dto.response.SignUpResponseDto;
+import efub.session.blog.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
