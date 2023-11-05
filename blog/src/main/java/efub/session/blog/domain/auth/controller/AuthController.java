@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import efub.session.blog.domain.account.domain.Account;
+import efub.session.blog.domain.auth.dto.request.LoginRequestDto;
 import efub.session.blog.domain.auth.dto.request.SignUpRequestDto;
+import efub.session.blog.domain.auth.dto.response.JwtResponseDto;
 import efub.session.blog.domain.auth.dto.response.SignUpResponseDto;
 import efub.session.blog.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +29,11 @@ public class AuthController {
 	public SignUpResponseDto signUp(@RequestBody @Valid final SignUpRequestDto requestDto) {
 		Account account = authService.signUp(requestDto);
 		return new SignUpResponseDto(account);
+	}
+
+	@PostMapping("/login")
+	@ResponseStatus(value = HttpStatus.OK)
+	public JwtResponseDto login(@RequestBody final LoginRequestDto requestDto) {
+		return authService.login(requestDto.getEmail(), requestDto.getPassword());
 	}
 }
