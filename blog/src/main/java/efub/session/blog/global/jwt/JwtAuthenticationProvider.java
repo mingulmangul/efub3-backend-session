@@ -81,6 +81,7 @@ public class JwtAuthenticationProvider {
 	 */
 	public Authentication authenticate(String token) {
 		// 토큰 복호화
+		// Claim: 토큰에 담는 데이터 한 조각(Key-Value 쌍)
 		Claims claims = parseClaims(token);
 
 		if (claims.get("auth") == null) {
