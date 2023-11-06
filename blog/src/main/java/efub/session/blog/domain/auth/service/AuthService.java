@@ -1,8 +1,10 @@
 package efub.session.blog.domain.auth.service;
 
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,18 @@ public class AuthService {
 
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final JwtAuthenticationProvider jwtAuthenticationProvider;
+
+	/**
+	 * 현재 인증된(로그인한) 유저의 아이디를 찾아 반환합니다.
+	 * @return 인증된 유저의 아이디 값 (accountId)
+	 */
+	public static Long getCurrentAccountId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || authentication.getName() == null) {
+			throw new AuthenticationServiceException("There is no authentication information for the current user.");
+		}
+		return Long.valueOf(authentication.getName());
+	}
 
 	public Account signUp(SignUpRequestDto requestDto) {
 		if (existsByEmail(requestDto.getEmail())) {
