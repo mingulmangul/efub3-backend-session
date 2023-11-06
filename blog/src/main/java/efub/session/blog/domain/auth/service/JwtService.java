@@ -23,4 +23,33 @@ public class JwtService {
 	public void saveJwtToken(String accountId, String accessToken, String refreshToken) {
 		jwtRepository.save(new JwtToken(accountId, accessToken, refreshToken));
 	}
+
+	/**
+	 * 새로운 액세스 토큰을 발급합니다.
+	 * @param accessToken 기존 액세스 토큰
+	 * @return 새로운 액세스 토큰
+	 */
+	public String refresh(String accessToken) {
+		// 토큰 조회
+		JwtToken token = getJwtTokenByAccessToken(accessToken);
+
+		// 리프레시 토큰을 기반으로 액세스 토큰 재발급
+		String generatedAccessToken = jwtAuthenticationProvider.generateAccessTokenByRefreshToken(token);
+
+		// 토큰 정보 업데이트
+		token.updateAccessToken(generatedAccessToken);
+		jwtRepository.save(token);
+
+		return generatedAccessToken;
+	}
+
+	/**
+	 * Redis에서 access token을 기반으로 JWT를 조회합니다.
+	 * @param accessToken 액세스 토큰
+	 * @return 조회된 JWT
+	 */
+	private JwtToken getJwtTokenByAccessToken(String accessToken) {
+		return jwtRepository.findByAccessToken(accessToken)
+			.orElseThrow(() -> new IllegalArgumentException("There are no tokens stored."));
+	}
 }
