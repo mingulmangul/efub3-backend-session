@@ -19,6 +19,8 @@ public class AuthService {
 
 	private final PasswordEncoder passwordEncoder;
 	private final AccountRepository accountRepository;
+	private final JwtService jwtService;
+
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
@@ -39,6 +41,11 @@ public class AuthService {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
 		// Authentication 객체 검증
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
-		return jwtAuthenticationProvider.generateJwt(authentication);
+		// JWT 토큰 생성
+		JwtResponseDto jwtResponseDto = jwtAuthenticationProvider.generateJwt(authentication);
+		// Redis에 토큰 저장
+		jwtService.saveJwtToken(authentication.getName(), jwtResponseDto.getAccessToken(),
+			jwtResponseDto.getRefreshToken());
+		return jwtResponseDto;
 	}
 }
