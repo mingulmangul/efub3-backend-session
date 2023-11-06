@@ -1,5 +1,6 @@
 package efub.session.blog.domain.auth.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import efub.session.blog.domain.auth.dto.request.SignUpRequestDto;
 import efub.session.blog.domain.auth.dto.response.JwtResponseDto;
 import efub.session.blog.domain.auth.dto.response.SignUpResponseDto;
 import efub.session.blog.domain.auth.service.AuthService;
+import efub.session.blog.domain.auth.service.JwtService;
+import efub.session.blog.global.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final AuthService authService;
+	private final JwtService jwtService;
 
 	@PostMapping("/signup")
 	@ResponseStatus(value = HttpStatus.CREATED)
@@ -35,5 +39,11 @@ public class AuthController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public JwtResponseDto login(@RequestBody final LoginRequestDto requestDto) {
 		return authService.login(requestDto.getEmail(), requestDto.getPassword());
+	}
+
+	@PostMapping("/logout")
+	public void logout(HttpServletRequest request) {
+		String accessToken = JwtUtils.resolveToken(request);
+		jwtService.removeJwtToken(accessToken);
 	}
 }

@@ -25,6 +25,15 @@ public class JwtService {
 	}
 
 	/**
+	 * Redis에서 JWT를 제거합니다.
+	 * @param accessToken 데이터를 식별할 액세스 토큰
+	 */
+	public void removeJwtToken(String accessToken) {
+		JwtToken token = getJwtTokenByAccessToken(accessToken);
+		jwtRepository.delete(token);
+	}
+
+	/**
 	 * 새로운 액세스 토큰을 발급합니다.
 	 * @param accessToken 기존 액세스 토큰
 	 * @return 새로운 액세스 토큰
