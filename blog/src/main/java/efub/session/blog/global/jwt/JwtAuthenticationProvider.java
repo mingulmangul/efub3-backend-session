@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import efub.session.blog.domain.auth.dto.response.JwtResponseDto;
+import efub.session.blog.domain.auth.entity.JwtToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -50,20 +51,10 @@ public class JwtAuthenticationProvider {
 	 * @return JwtToken : JWT
 	 */
 	public JwtResponseDto generateJwt(Authentication authentication) {
-		// 권한 정보를 가져옴
-		String authorities = authentication.getAuthorities().stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
-
 		long now = new Date(System.currentTimeMillis()).getTime();
 
 		// Access Token 생성
-		String accessToken = Jwts.builder()
-			.subject(authentication.getName())
-			.claim("auth", authorities)
-			.expiration(new Date(now + ACCESS_TOKEN_VALID_TIME))
-			.signWith(secretKey)
-			.compact();
+		String accessToken = generateAccessToken(authentication.getName(), authentication.getAuthorities(), now);
 
 		// Refresh Token 생성
 		String refreshToken = Jwts.builder()
@@ -72,6 +63,46 @@ public class JwtAuthenticationProvider {
 			.compact();
 
 		return new JwtResponseDto(accessToken, refreshToken);
+	}
+
+	/**
+	 * 액세스 토큰을 생성합니다.
+	 * @param subject 토큰의 주체 (여기서는 accountId를 저장함)
+	 * @param authorities 유저의 권한 정보
+	 * @param now 현재 시각
+	 * @return 액세스 토큰
+	 */
+	private String generateAccessToken(String subject,
+		Collection<? extends GrantedAuthority> authorities, long now) {
+		// 권한 정보를 문자열로 변환
+		String auth = authorities.stream()
+			.map(GrantedAuthority::getAuthority)
+			.collect(Collectors.joining(","));
+
+		return Jwts.builder()
+			.subject(subject)
+			.claim("auth", auth)
+			.expiration(new Date(now + ACCESS_TOKEN_VALID_TIME))
+			.signWith(secretKey)
+			.compact();
+	}
+
+	/**
+	 * 리프레시 토큰을 기반으로 액세스 토큰을 재발급합니다.
+	 * @param token 토큰
+	 * @return 새로 생성된 액세스 토큰
+	 */
+	public String generateAccessTokenByRefreshToken(JwtToken token) {
+		// 리프레시 토큰 검증
+		validateToken(token.getRefreshToken());
+
+		// 액세스 토큰 정보 조회
+		Claims claims = parseClaims(token.getAccessToken());
+		Collection<? extends GrantedAuthority> authorities = getGrantedAuthorities(claims);
+
+		// 액세스 토큰 발급
+		long now = new Date(System.currentTimeMillis()).getTime();
+		return generateAccessToken(claims.getSubject(), authorities, now);
 	}
 
 	/**
@@ -84,20 +115,29 @@ public class JwtAuthenticationProvider {
 		// Claim: 토큰에 담는 데이터 한 조각(Key-Value 쌍)
 		Claims claims = parseClaims(token);
 
-		if (claims.get("auth") == null) {
-			throw new SecurityException("Unauthorized JWT Token");
-		}
-
-		// 권한 정보를 꺼냄
-		Collection<SimpleGrantedAuthority> authorities =
-			Arrays.stream(claims.get("auth").toString().split(","))
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
+		// 토큰에서 권한 정보를 꺼냄
+		Collection<? extends GrantedAuthority> authorities = getGrantedAuthorities(claims);
 
 		// 유저 인증 정보 생성
 		UserDetails principal = new User(claims.getSubject(), "", authorities);
 		log.debug("User principal: {}", principal.getUsername());
 		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+	}
+
+	/**
+	 * 토큰의 페이로드에서 유저의 권한 정보를 조회합니다.
+	 * @param claims 토큰의 페이로드
+	 * @return 권한 목록
+	 */
+	private Collection<? extends GrantedAuthority> getGrantedAuthorities(Claims claims) {
+		// 토큰에 권한 정보가 없는 경우 예외 발생
+		if (claims.get("auth") == null) {
+			throw new SecurityException("Unauthorized JWT Token");
+		}
+		// 권한 정보를 꺼냄
+		return Arrays.stream(claims.get("auth").toString().split(","))
+			.map(SimpleGrantedAuthority::new)
+			.collect(Collectors.toList());
 	}
 
 	/**
