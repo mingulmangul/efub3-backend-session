@@ -16,7 +16,7 @@ import efub.session.blog.global.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -32,7 +32,7 @@ public class SecurityConfig {
 			.and()
 			.authorizeRequests()
 			.antMatchers(HttpMethod.GET).permitAll()
-			.antMatchers("/auth/**").permitAll() // 해당 URL에 대한 요청은 허용
+			.antMatchers("/auth/**", "/token/**").permitAll() // 해당 URL에 대한 요청은 허용
 			.anyRequest().authenticated()
 			.and()
 			.addFilterBefore(new JwtFilter(jwtAuthenticationProvider),
